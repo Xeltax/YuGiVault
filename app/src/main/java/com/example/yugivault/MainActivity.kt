@@ -1,25 +1,18 @@
 package com.example.yugivault
 import android.Manifest
 import android.app.Activity
-import android.content.ContentValues
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.OptIn
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.video.Recorder
-import androidx.camera.video.Recording
-import androidx.camera.video.VideoCapture
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
@@ -30,8 +23,6 @@ import com.example.yugivault.databinding.ActivityMainBinding
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class MainActivity : Activity() {
     private lateinit var viewBinding: ActivityMainBinding
@@ -158,8 +149,18 @@ private class MlKitAnalyzer : ImageAnalysis.Analyzer {
                     val resultText = result.text
                     for (block in result.textBlocks) {
                         val blockText = block.text
-                        Log.v("text", "blockText: $blockText")
-                        analysisActive = false
+                        val blockCornerPoints = block.cornerPoints
+                        val blockFrame = block.boundingBox
+                        for (line in block.lines) {
+                            val lineText = line.text
+                            val regex = Regex("\\b([A-Z]+)\\b(?:\\s*\\[.*?\\]|\\s*\\(.*?\\)|\\s*\\{.*?\\})*")
+                            if (regex.find(lineText) != null) {
+                                Log.v("text", "blockText: $lineText")
+                                analysisActive = false
+                                
+                                break
+                            }
+                        }
                     }
                 }
                 .addOnFailureListener { e ->
