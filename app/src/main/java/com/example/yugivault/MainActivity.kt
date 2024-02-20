@@ -1,6 +1,8 @@
 package com.example.yugivault
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,9 +16,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.yugivault.ui.theme.YuGiVaultTheme
 import com.example.yugivault.utils.rest.ApiHandler
 
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        setContentView(R.layout.activity_main)
+
+        val button: Button = findViewById(R.id.button)
+        button.setOnClickListener{
+                val intent = Intent(this, MLActivity::class.java)
+                startActivity(intent)
+                finish()
+        }
+
+
+
 
         val apiUrl = "https://db.ygoprodeck.com/api/v7/cardinfo.php?archetype=Blue-Eyes"
 
@@ -34,14 +49,16 @@ class MainActivity : ComponentActivity() {
             }
         )
 
-        setContent {
+
+
+/*        setContent {
             YuGiVaultTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     Greeting("Android")
                 }
             }
-        }
+        }*/
     }
 }
 
