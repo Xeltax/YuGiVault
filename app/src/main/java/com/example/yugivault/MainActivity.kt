@@ -20,6 +20,7 @@ import com.example.yugivault.utils.rest.ApiHandler
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        var tosend="";
 
         setContentView(R.layout.activity_main)
 
@@ -30,6 +31,15 @@ class MainActivity : ComponentActivity() {
                 finish()
         }
 
+        val ButCard: Button = findViewById(R.id.Card)
+            ButCard.setOnClickListener{
+            val intent = Intent(this, DetectedCardActivity::class.java)
+                intent.putExtra("detectedText", tosend)
+            startActivity(intent)
+            finish()
+        }
+
+
 
 
 
@@ -37,10 +47,12 @@ class MainActivity : ComponentActivity() {
 
         val apiHandler = ApiHandler(this)
 
+
         apiHandler.getByName("Dark Magician",
             { response ->
                 // La requête a réussi, traiter la réponse ici
                 println("Réponse de la requête: $response")
+                tosend=response.toString()
                 Toast.makeText(this, response.toString(), Toast.LENGTH_LONG).show()
             },
             { error ->

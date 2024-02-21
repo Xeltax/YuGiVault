@@ -11,4 +11,12 @@
         android:text="Chnage d'acitivite"
         tools:layout_editor_absoluteX="132dp"
         tools:layout_editor_absoluteY="385dp" />
+
+    <Button
+        android:id="@+id/Card"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Card"
+        tools:layout_editor_absoluteX="111dp"
+        tools:layout_editor_absoluteY="550dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

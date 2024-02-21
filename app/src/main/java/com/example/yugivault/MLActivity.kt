@@ -1,54 +1,59 @@
 package com.example.yugivault
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import com.example.yugivault.ui.theme.YuGiVaultTheme
 import android.Manifest
-import android.content.ContentValues
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import android.provider.MediaStore
+import android.os.Bundle
 import android.util.Log
-import androidx.camera.core.ImageCapture
-import androidx.camera.video.Recorder
-import androidx.camera.video.Recording
-import androidx.camera.video.VideoCapture
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import com.example.yugivault.databinding.ActivityMlBinding
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
-import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
+import androidx.camera.core.impl.utils.ContextUtil.getApplicationContext
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
+import com.example.yugivault.databinding.ActivityMlBinding
+import com.example.yugivault.ui.theme.YuGiVaultTheme
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
-import java.text.SimpleDateFormat
-import java.util.Locale
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+
 
 typealias LumaListener = (luma: Double) -> Unit
 
-class MLActivity : ComponentActivity() {
+class MLActivity :  ComponentActivity(),ImageAnalysis.Analyzer {
     private lateinit var viewBinding: ActivityMlBinding
 
     val lifecycleOwner: LifecycleOwner = ProcessLifecycleOwner.get()
 
     private lateinit var cameraExecutor: ExecutorService
+    fun sendDataToNewActivity(detectedText: String) {
+        // Créer un Intent pour démarrer la nouvelle activité
+        Log.v("text", "blockText: $detectedText")
+        println("On rentre dans la fonction")
+        val intent = Intent(this, DetectedCardActivity::class.java)
+        println("On a créé l'intent")
+        intent.putExtra("detectedText", detectedText)
+        println("On a ajouté l'extra")
+        // Démarrer la nouvelle activité
+        startActivity(intent)
+        println("On a démarré l'activité")
+        finish()
+        println("On a fini")
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +65,8 @@ class MLActivity : ComponentActivity() {
             startCamera()
         } else {
             ActivityCompat.requestPermissions(
-                this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
+                this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
+            )
         }
 
         cameraExecutor = Executors.newSingleThreadExecutor()
@@ -92,13 +98,18 @@ class MLActivity : ComponentActivity() {
                     .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                     .build()
                     .also {
-                        it.setAnalyzer(cameraExecutor, MlKitAnalyzer())
+                        it.setAnalyzer(cameraExecutor, this)
                     }
 
                 // Bind use cases to camera
-                cameraProvider.bindToLifecycle(lifecycleOwner, cameraSelector, preview, imageAnalyzer)
+                cameraProvider.bindToLifecycle(
+                    lifecycleOwner,
+                    cameraSelector,
+                    preview,
+                    imageAnalyzer
+                )
 
-            } catch(exc: Exception) {
+            } catch (exc: Exception) {
                 Log.e(TAG, "Use case binding failed", exc)
             }
 
@@ -111,7 +122,8 @@ class MLActivity : ComponentActivity() {
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
-            baseContext, it) == PackageManager.PERMISSION_GRANTED
+            baseContext, it
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     override fun onDestroy() {
@@ -121,15 +133,18 @@ class MLActivity : ComponentActivity() {
 
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults:
-        IntArray) {
+        IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_CODE_PERMISSIONS) {
             if (allPermissionsGranted()) {
                 startCamera()
             } else {
-                Toast.makeText(this,
+                Toast.makeText(
+                    this,
                     "Permissions not granted by the user.",
-                    Toast.LENGTH_SHORT).show()
+                    Toast.LENGTH_SHORT
+                ).show()
                 finish()
             }
         }
@@ -140,7 +155,7 @@ class MLActivity : ComponentActivity() {
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
         private const val REQUEST_CODE_PERMISSIONS = 10
         private val REQUIRED_PERMISSIONS =
-            mutableListOf (
+            mutableListOf(
                 Manifest.permission.CAMERA,
                 Manifest.permission.RECORD_AUDIO
             ).apply {
@@ -149,11 +164,11 @@ class MLActivity : ComponentActivity() {
                 }
             }.toTypedArray()
     }
-}
 
-private class MlKitAnalyzer : ImageAnalysis.Analyzer {
     private var analysisActive = true
-    @OptIn(ExperimentalGetImage::class) override fun analyze(imageProxy: ImageProxy) {
+    var blockText = ""
+    @OptIn(ExperimentalGetImage::class)
+    override fun analyze(imageProxy: ImageProxy) {
         if (!analysisActive) {
             imageProxy.close()
             return
@@ -167,9 +182,14 @@ private class MlKitAnalyzer : ImageAnalysis.Analyzer {
                 .addOnSuccessListener { result ->
                     val resultText = result.text
                     for (block in result.textBlocks) {
-                        val blockText = block.text
+                        blockText = block.text
                         Log.v("text", "blockText: $blockText")
-                        analysisActive = false
+                        if (!blockText.equals("")) {
+                            println("On rentre dans le if")
+                            analysisActive = false
+                            break;
+                        }
+
                     }
                 }
                 .addOnFailureListener { e ->
@@ -177,23 +197,19 @@ private class MlKitAnalyzer : ImageAnalysis.Analyzer {
                 }
                 .addOnCompleteListener {
                     imageProxy.close()
+                    if(blockText != "") {
+                        stopCamera()
+                        sendToDetectedCardActivity()
+                    }
+
                 }
         }
+    }//analyze
+
+    fun sendToDetectedCardActivity() {
+        sendDataToNewActivity(blockText)
     }
 }
 
-@Composable
-fun Greeting2(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
 
-@androidx.compose.ui.tooling.preview.Preview(showBackground = true)
-@Composable
-fun GreetingPreview2() {
-    YuGiVaultTheme {
-        Greeting2("Android")
-    }
-}
+
