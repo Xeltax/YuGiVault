@@ -85,8 +85,7 @@
                 android:layout_marginEnd="39dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/NameAttributeZone"
-                tools:src="@tools:sample/avatars" />
+                app:layout_constraintTop_toBottomOf="@+id/NameAttributeZone" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/DescStatTypeZone"

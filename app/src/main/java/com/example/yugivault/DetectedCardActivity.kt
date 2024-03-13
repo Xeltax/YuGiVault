@@ -18,18 +18,6 @@ import org.json.JSONObject
 import java.io.StringReader
 
 
-data class CardInfo (
-    val id: Int,
-    val name: String,
-    val type: String,
-    val frameType: String,
-    val desc: String,
-    val atk: Int,
-    val def: Int,
-    val level: Int,
-    val race: String,
-    val attribute: String,
-)
 
 class DetectedCardActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,6 +56,16 @@ class DetectedCardActivity : ComponentActivity() {
             // Une erreur s'est produite lors de la requête
             Toast.makeText(this, error, Toast.LENGTH_LONG).show()
         }
+
+        apiHandler.getArtwork(jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("id").toString(), ArtWork,
+            {
+                // La requête a réussi, traiter la réponse ici
+
+                println("Réponse de la requête: ")
+            },{
+                // Une erreur s'est produite lors de la requête
+                println("Erreur de chargement de l'image")
+        })
 
 
 

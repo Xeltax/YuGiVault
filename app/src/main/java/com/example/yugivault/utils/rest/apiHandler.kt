@@ -2,6 +2,8 @@ package com.example.yugivault.utils.rest
 
 import android.content.Context
 import android.util.JsonReader
+import android.widget.ImageView
+import coil.load
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
@@ -61,7 +63,13 @@ class ApiHandler(private val context: Context) {
         makeApiRequest(API_URL + "?archetype=${name}", onSuccess, onError)
     }
 
-
+    fun getArtwork(id: String, imageView: ImageView, onSuccess: () -> Unit, onError: () -> Unit) {
+        // Utiliser Coil pour charger et afficher l'image
+        imageView.load(API_URL_ARTWORK + "${id}.jpg") {
+            // Gérer les résultats de chargement
+            listener(onSuccess = { _, _ -> onSuccess() }, onError = { _, _ -> onError() })
+        }
+    }
 
 
     private fun readJsonValue(reader: JsonReader, key: String): String? {
