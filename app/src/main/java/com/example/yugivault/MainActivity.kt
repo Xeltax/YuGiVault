@@ -43,7 +43,8 @@ class MainActivity : ComponentActivity() {
 
 
 
-        val apiUrl = "https://db.ygoprodeck.com/api/v7/cardinfo.php?archetype=Blue-Eyes"
+        //val apiUrl = "https://db.ygoprodeck.com/api/v7/cardinfo.php?archetype=Blue-Eyes"
+        val apiUrl="https://db.ygoprodeck.com/api/v7/cardinfo.php?id=46986421"
 
         val apiHandler = ApiHandler(this)
 
