@@ -6,6 +6,7 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.google.gson.JsonElement
 import org.json.JSONObject
 import java.io.IOException
 import java.io.StringReader
@@ -13,6 +14,7 @@ import java.io.StringReader
 class ApiHandler(private val context: Context) {
 
     private val API_URL = "https://db.ygoprodeck.com/api/v7/cardinfo.php"
+    private val API_URL_ARTWORK= "https://images.ygoprodeck.com/images/cards_cropped/"
 
     // Fonction pour faire une requête GET à une API distante
     fun makeApiRequest(url: String, onSuccess: (JSONObject) -> Unit, onError: (String) -> Unit) {
@@ -58,6 +60,9 @@ class ApiHandler(private val context: Context) {
     fun getByArchetype(name: String, onSuccess: (JSONObject) -> Unit, onError: (String) -> Unit) {
         makeApiRequest(API_URL + "?archetype=${name}", onSuccess, onError)
     }
+
+
+
 
     private fun readJsonValue(reader: JsonReader, key: String): String? {
         try {

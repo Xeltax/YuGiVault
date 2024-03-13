@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -55,23 +53,21 @@ class MainActivity : ComponentActivity() {
                 println("Réponse de la requête: $response")
                 tosend=response.toString()
                 Toast.makeText(this, response.toString(), Toast.LENGTH_LONG).show()
-            },
-            { error ->
-                // Une erreur s'est produite lors de la requête
-                Toast.makeText(this, error, Toast.LENGTH_LONG).show()
             }
-        )
+        ) { error ->
+            // Une erreur s'est produite lors de la requête
+            Toast.makeText(this, error, Toast.LENGTH_LONG).show()
+        }
 
 
-
-/*        setContent {
-            YuGiVaultTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    Greeting("Android")
-                }
-            }
-        }*/
+        /*        setContent {
+                    YuGiVaultTheme {
+                        // A surface container using the 'background' color from the theme
+                        Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+                            Greeting("Android")
+                        }
+                    }
+                }*/
     }
 }
 
