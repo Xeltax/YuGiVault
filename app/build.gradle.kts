@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
 }
 
 android {
@@ -51,7 +52,11 @@ android {
 }
 
 
+
+
 dependencies {
+    implementation ("androidx.room:room-runtime:2.4.1")
+    kapt ("androidx.room:room-compiler:2.4.1")
     implementation("io.coil-kt:coil:1.3.2")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.appcompat:appcompat:1.6.1")

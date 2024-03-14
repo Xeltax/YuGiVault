@@ -1,7 +1,6 @@
 package com.example.yugivault
 
 import android.os.Bundle
-import android.util.JsonReader
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -11,18 +10,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.yugivault.ui.theme.YuGiVaultTheme
+import com.example.yugivault.utils.DAO.CardDAO
+import com.example.yugivault.utils.DataBase.Vault
 import com.example.yugivault.utils.rest.ApiHandler
-import com.google.gson.Gson
-import com.google.gson.JsonElement
 import org.json.JSONObject
-import java.io.StringReader
-
 
 
 class DetectedCardActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detected_card)
+        println("On est dans DetectedCardActivity")
+        val vault = Vault(this)
+        println("On est dans DetectedCardActivity")
+        vault.addCard(CardDAO.generateRandomCard())
+
+        println("Fake Data: "+CardDAO.getCard(vault, 1))
 
         val Name = findViewById<TextView>(R.id.Name)
         val Attribute = findViewById<TextView>(R.id.Attribute)
@@ -36,7 +40,7 @@ class DetectedCardActivity : ComponentActivity() {
         println(detectedText)
 
 
-        val apiHandler = ApiHandler(this)
+       /* val apiHandler = ApiHandler(this)
         var jsonResponse: JSONObject? = null
         apiHandler.getByName("Dark Magician",
             { response ->
@@ -55,17 +59,22 @@ class DetectedCardActivity : ComponentActivity() {
         ) { error ->
             // Une erreur s'est produite lors de la requête
             Toast.makeText(this, error, Toast.LENGTH_LONG).show()
-        }
+        }*/
 
-        apiHandler.getArtwork(jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("id").toString(), ArtWork,
-            {
-                // La requête a réussi, traiter la réponse ici
 
-                println("Réponse de la requête: ")
-            },{
-                // Une erreur s'est produite lors de la requête
-                println("Erreur de chargement de l'image")
-        })
+/*        var idT=jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("id")
+        var nameT=jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("name")
+        var typeT=jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("type")
+        var frameTypeT=jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("frameType")
+        var descT=jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("desc")
+        var atkT=jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("atk")
+        var defT=jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("def")
+        var levelT=jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("level")
+        var raceT=jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("race")
+        var attributeT=jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("attribute")
+        var artworkT="000"*/
+
+
 
 
 
