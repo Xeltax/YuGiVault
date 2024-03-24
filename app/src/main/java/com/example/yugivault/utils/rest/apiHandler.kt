@@ -3,10 +3,8 @@ package com.example.yugivault.utils.rest
 import android.content.Context
 import android.util.JsonReader
 import com.android.volley.Request
-import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.google.gson.JsonElement
 import org.json.JSONObject
 import java.io.IOException
 import java.io.StringReader

@@ -5,19 +5,47 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.Observer
+import androidx.room.Room
 import com.example.yugivault.ui.theme.YuGiVaultTheme
+import com.example.yugivault.utils.db.AppDatabase
+import com.example.yugivault.utils.entity.Card
 import com.example.yugivault.utils.rest.ApiHandler
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val db = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java, "dbVault"
+        ).build()
+
+        val cardDAO = db.cardDAO()
+        val DM = Card(1, "Dark Magician", "Monster", "The ultimate wizard in terms of attack and defense.", 2500, 2100, 7, "Spellcaster", "Dark", "Dark Magician", "SDY-006", "https://storage.googleapis.com/ygoprodeck.com/pics/46986414.jpg", "https://storage.googleapis.com/ygoprodeck.com/pics/46986414.jpg")
+
+// Observer les changements de données avec LiveData
+        cardDAO.getCardById(1).observe(this, Observer { card ->
+            card?.let {
+                println("Card: ${it.name}, Type: ${it.type}")
+            } ?: run {
+                println("Card not found for id")
+            }
+        })
+
+        // Insérer la carte dans la base de données
+        GlobalScope.launch {
+            //cardDAO.insert(DM)
+        }
+
+
         var tosend="";
 
         setContentView(R.layout.activity_main)
