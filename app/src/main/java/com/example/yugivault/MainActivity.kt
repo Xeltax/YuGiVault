@@ -65,6 +65,13 @@ class MainActivity : ComponentActivity() {
             finish()
         }
 
+        val ButCollection: Button = findViewById(R.id.Collection)
+        ButCollection.setOnClickListener{
+            val intent = Intent(this, CardCollection::class.java)
+            startActivity(intent)
+            finish()
+        }
+
 
 
 

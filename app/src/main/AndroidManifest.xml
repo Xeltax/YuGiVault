@@ -35,6 +35,7 @@
         </activity>
         <activity android:name=".MLActivity" />
         <activity android:name=".DetectedCardActivity" />
+        <activity android:name=".CardCollection" />
     </application>
 
 </manifest>
