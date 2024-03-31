@@ -15,9 +15,9 @@ data class Card(
     @ColumnInfo(name = "level") val level: Int,
     @ColumnInfo(name = "race") val race: String,
     @ColumnInfo(name = "attribute") val attribute: String,
-    @ColumnInfo(name = "archetype") val archetype: String?,
-    @ColumnInfo(name = "card_sets") val card_sets: String?,
-    @ColumnInfo(name = "card_images") val card_images: String?,
-    @ColumnInfo(name = "card_prices") val card_prices: String?
+    @ColumnInfo(name = "archetype") val archetype: String? = null,
+    @ColumnInfo(name = "card_sets") val card_sets: String? = null,
+    @ColumnInfo(name = "card_images") val card_images: String? = null,
+    @ColumnInfo(name = "card_prices") val card_prices: String? = null
 
 )
