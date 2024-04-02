@@ -3,7 +3,6 @@ plugins {
     id("org.jetbrains.kotlin.android") version "1.9.0"
     id("com.google.devtools.ksp") version "1.9.21-1.0.15"
     kotlin("kapt") version "1.9.23"
-
 }
 
 android {
@@ -54,6 +53,8 @@ android {
     kapt {
         correctErrorTypes = true
     }
+
+
 }
 
 

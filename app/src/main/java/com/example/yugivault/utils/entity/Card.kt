@@ -9,6 +9,7 @@ data class Card(
     @PrimaryKey val uid: Int,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "type") val type: String,
+    @ColumnInfo(name = "frameType") val frameType: String,
     @ColumnInfo(name = "desc") val desc: String,
     @ColumnInfo(name = "atk") val atk: Int,
     @ColumnInfo(name = "def") val def: Int,

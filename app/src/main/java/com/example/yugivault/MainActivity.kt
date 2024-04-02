@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
         ).build()
 
         val cardDAO = db.cardDAO()
-        val DM = Card(1, "Dark Magician", "Monster", "The ultimate wizard in terms of attack and defense.", 2500, 2100, 7, "Spellcaster", "Dark", "Dark Magician", "SDY-006", "https://storage.googleapis.com/ygoprodeck.com/pics/46986414.jpg", "https://storage.googleapis.com/ygoprodeck.com/pics/46986414.jpg")
+        val DM = Card(1, "Dark Magician", "Monster","normal" ,"The ultimate wizard in terms of attack and defense.", 2500, 2100, 7, "Spellcaster", "Dark", "Dark Magician", "SDY-006", "https://storage.googleapis.com/ygoprodeck.com/pics/46986414.jpg", "https://storage.googleapis.com/ygoprodeck.com/pics/46986414.jpg")
 
 // Observer les changements de données avec LiveData
         cardDAO.getCardById(1).observe(this, Observer { card ->

@@ -3,6 +3,7 @@ package com.example.yugivault
 import android.content.Intent
 import android.os.Bundle
 import android.util.JsonReader
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -11,11 +12,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.example.yugivault.ui.theme.YuGiVaultTheme
 import com.example.yugivault.utils.db.AppDatabase
 import com.example.yugivault.utils.entity.Card
 import com.example.yugivault.utils.rest.ApiHandler
+import com.example.yugivault.utils.view.CardAdapter
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import kotlinx.coroutines.GlobalScope
@@ -38,18 +42,21 @@ data class CardInfo (
 )
 
 class DetectedCardActivity : ComponentActivity() {
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: CardAdapter
+    private lateinit var cardInfo: CardInfo
+    private lateinit var card : Card
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detected_card)
 
-        val Name = findViewById<TextView>(R.id.Name)
-        val Attribute = findViewById<TextView>(R.id.Attribute)
-        val ArtWork = findViewById<ImageView>(R.id.ArtWork)
-        val TypeRace = findViewById<TextView>(R.id.TypeRace)
-        val Desc = findViewById<TextView>(R.id.Desc)
-        val AtkDef = findViewById<TextView>(R.id.AtkDef)
-        val btnYes = findViewById<TextView>(R.id.btnYes)
-        val btnNo = findViewById<TextView>(R.id.btnNo)
+        recyclerView = findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        val btnYes = findViewById<Button>(R.id.btnYes)
+        val btnNo = findViewById<Button>(R.id.btnNo)
+
 
         //val detectedText = intent.getStringExtra("detectedText")
         val detectedText = "Dark Magician"
@@ -64,12 +71,23 @@ class DetectedCardActivity : ComponentActivity() {
                 println("Réponse de la requête: $response")
 
                 jsonResponse= JSONObject(response.toString())
-                Name.text = jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("name")
-                Attribute.text = jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("attribute")
-                Desc.text = jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("desc")
-                TypeRace.text =  "["+jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("frameType")+"/" + jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("race")+"]"
-                AtkDef.text = "ATK/ "+jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("atk") + "  DEF /" + jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("def")
+                 cardInfo = CardInfo(
+                    id = jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("id")!!.toInt(),
+                    name = jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("name")!!,
+                    type = jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("type")!!,
+                    frameType = jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("frameType")!!,
+                    desc = jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("desc")!!,
+                    atk = jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("atk")!!.toInt(),
+                    def = jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("def")!!.toInt(),
+                    level = jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("level")!!.toInt(),
+                    attribute = jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("attribute")!!,
+                    race = jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("race")!!
+                )
+                card = Card(cardInfo.id, cardInfo.name, cardInfo.type, cardInfo.frameType,cardInfo.desc, cardInfo.atk, cardInfo.def, cardInfo.level, cardInfo.race, cardInfo.attribute)
 
+                val temp = mutableListOf(card)
+                adapter = CardAdapter(temp)
+                recyclerView.adapter = adapter
                 //Toast.makeText(this, response.toString(), Toast.LENGTH_LONG).show()
             }
         ) { error ->
@@ -85,23 +103,11 @@ class DetectedCardActivity : ComponentActivity() {
 
             val cardDAO = db.cardDAO()
 
-            val cardInfo = CardInfo(
-                id = jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("id")!!.toInt(),
-                name = jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("name")!!,
-                type = jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("type")!!,
-                frameType = jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("frameType")!!,
-                desc = jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("desc")!!,
-                atk = jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("atk")!!.toInt(),
-                def = jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("def")!!.toInt(),
-                level = jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("level")!!.toInt(),
-                attribute = jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("attribute")!!,
-                race = jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("race")!!
-            )
             cardDAO.getCardById(cardInfo.id).observe(this, { card ->
                 if (card == null) {
-                    val newCard = Card(cardInfo.id, cardInfo.name, cardInfo.type, cardInfo.desc, cardInfo.atk, cardInfo.def, cardInfo.level, cardInfo.race, cardInfo.attribute)
+                    val newCard = Card(cardInfo.id, cardInfo.name, cardInfo.type, cardInfo.frameType,cardInfo.desc, cardInfo.atk, cardInfo.def, cardInfo.level, cardInfo.race, cardInfo.attribute)
                     GlobalScope.launch {
-                        cardDAO.insert(newCard)
+                        cardDAO.insert(newCard )
                     }
                     Toast.makeText(this, "Card added to collection", Toast.LENGTH_LONG).show()
                 } else {
