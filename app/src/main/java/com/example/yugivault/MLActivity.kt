@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.camera.core.CameraSelector
@@ -19,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.LifecycleOwner
@@ -57,8 +59,35 @@ class MLActivity :  ComponentActivity(),ImageAnalysis.Analyzer {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         viewBinding = ActivityMlBinding.inflate(layoutInflater)
+
         setContentView(viewBinding.root)
+
+        val catalogue: ImageButton = findViewById(R.id.imageButton2)
+        catalogue.setOnClickListener{
+            val intent = Intent(this, MainActivity::class.java)
+            val options = ActivityOptionsCompat.makeCustomAnimation(this, 0, 0)
+            startActivity(intent, options.toBundle())
+            finish()
+        }
+
+        val scan: ImageButton = findViewById(R.id.imageButton3)
+        scan.setOnClickListener{
+            val intent = Intent(this, MLActivity::class.java)
+            val options = ActivityOptionsCompat.makeCustomAnimation(this, 0, 0)
+            startActivity(intent, options.toBundle())
+            finish()
+        }
+
+        val deck: ImageButton = findViewById(R.id.imageButton)
+        deck.setOnClickListener{
+            val intent = Intent(this, DeckActivity::class.java)
+            val options = ActivityOptionsCompat.makeCustomAnimation(this, 0, 0)
+            startActivity(intent, options.toBundle())
+            startActivity(intent)
+            finish()
+        }
 
         // Request camera permissions
         if (allPermissionsGranted()) {

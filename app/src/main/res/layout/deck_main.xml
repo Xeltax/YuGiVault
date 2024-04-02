@@ -1,39 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent">
 
-    <androidx.camera.view.PreviewView
-        android:id="@+id/viewFinder"
+    <!--    <Button-->
+    <!--        android:id="@+id/button"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="72dp"-->
+    <!--        android:layout_marginTop="124dp"-->
+    <!--        android:text="Chnage d'acitivite"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/Card"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <!--    <Button-->
+    <!--        android:id="@+id/Card"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="48dp"-->
+    <!--        android:layout_marginTop="124dp"-->
+    <!--        android:text="Card"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <!--    <Button-->
+    <!--        android:id="@+id/Collection"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="60dp"-->
+    <!--        android:layout_marginTop="112dp"-->
+    <!--        android:text="Ma collection"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/Card" />-->
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="@drawable/background"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints">
 
-    <Button
-        android:id="@+id/image_capture_button"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
-        android:layout_marginBottom="50dp"
-        android:layout_marginEnd="50dp"
-        android:elevation="2dp"
-        android:text="@string/take_photo"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/vertical_centerline" />
+        <View
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1" />
 
-    <Button
-        android:id="@+id/video_capture_button"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
-        android:layout_marginBottom="50dp"
-        android:layout_marginStart="50dp"
-        android:elevation="2dp"
-        android:text="@string/start_capture"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/vertical_centerline" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -57,11 +73,10 @@
             android:id="@+id/imageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#003793E6"
             android:padding="8dp"
             android:src="@drawable/layer_group_solid"
-            app:tint="#1AFF00"
-            android:tint="@color/white" />
+            android:background="@drawable/circle_background"
+            android:tint="#284798" />
 
 
         <!-- Vue invisible pour espacement -->
@@ -75,7 +90,7 @@
             android:id="@+id/imageButton2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#00366AA5"
+            android:background="#003793E6"
             android:padding="8dp"
             android:src="@drawable/book_open_solid"
             android:tint="#FFFFFF" />
@@ -90,10 +105,10 @@
             android:id="@+id/imageButton3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/circle_background"
+            android:background="#003793E6"
             android:padding="8dp"
             android:src="@drawable/camera_solid"
-            android:tint="#284798"
+            android:tint="@color/white"
             />
 
         <!-- Vue invisible pour espacement -->
@@ -103,12 +118,4 @@
             android:layout_weight="1" />
 
     </LinearLayout>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/vertical_centerline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent=".50" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
