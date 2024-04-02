@@ -7,6 +7,7 @@ import com.example.yugivault.R
 import com.example.yugivault.utils.entity.Card
 
 class CardViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
+
     val cardName : TextView = itemView.findViewById(R.id.Name)
     val cardTypeRace : TextView = itemView.findViewById(R.id.TypeRace)
     val cardAtkDef : TextView = itemView.findViewById(R.id.AtkDef)
@@ -14,8 +15,8 @@ class CardViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(card : Card) {
         cardName.text = card.name
-        cardTypeRace.text = card.type +"/"+card.race
-        cardAtkDef.text = card.atk.toString()+" / "+card.def.toString()
+        cardTypeRace.text = "${card.type}/${card.race}"
+        cardAtkDef.text = "ATK: ${card.atk} / DEF: ${card.def}"
         cardAttribute.text = card.attribute
     }
 }

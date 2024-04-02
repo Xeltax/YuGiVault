@@ -20,6 +20,7 @@ import com.example.yugivault.utils.db.AppDatabase
 import com.example.yugivault.utils.entity.Card
 import com.example.yugivault.utils.rest.ApiHandler
 import com.example.yugivault.utils.view.CardAdapter
+import com.example.yugivault.utils.view.OnItemClickListener
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import kotlinx.coroutines.GlobalScope
@@ -41,12 +42,13 @@ data class CardInfo (
     val attribute: String,
 )
 
-class DetectedCardActivity : ComponentActivity() {
+class DetectedCardActivity : ComponentActivity(){
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CardAdapter
     private lateinit var cardInfo: CardInfo
     private lateinit var card : Card
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detected_card)
@@ -86,7 +88,7 @@ class DetectedCardActivity : ComponentActivity() {
                 card = Card(cardInfo.id, cardInfo.name, cardInfo.type, cardInfo.frameType,cardInfo.desc, cardInfo.atk, cardInfo.def, cardInfo.level, cardInfo.race, cardInfo.attribute)
 
                 val temp = mutableListOf(card)
-                adapter = CardAdapter(temp)
+                adapter = CardAdapter(temp,2)
                 recyclerView.adapter = adapter
                 //Toast.makeText(this, response.toString(), Toast.LENGTH_LONG).show()
             }
