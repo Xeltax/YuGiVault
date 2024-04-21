@@ -3,8 +3,10 @@ package com.example.yugivault
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.compose.material3.Text
@@ -18,6 +20,7 @@ import com.example.yugivault.ui.theme.YuGiVaultTheme
 import com.example.yugivault.utils.db.AppDatabase
 import com.example.yugivault.utils.entity.Card
 import com.example.yugivault.utils.rest.ApiHandler
+import com.google.android.flexbox.FlexboxLayout
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -49,6 +52,16 @@ class MainActivity : ComponentActivity() {
         // Insérer la carte dans la base de données
         GlobalScope.launch {
             //cardDAO.insert(DM)
+        }
+
+        val catalogueContainer : FlexboxLayout = findViewById(R.id.cardContainer)
+
+        for (i in 0..50) {
+            val card = View(this)
+            card.setBackgroundColor(resources.getColor(android.R.color.holo_green_light))
+            val params = LinearLayout.LayoutParams(300,500).apply { setMargins(16, 16, 16, 16) }
+            card.layoutParams = params
+            catalogueContainer.addView(card)
         }
 
         val catalogue: ImageButton = findViewById(R.id.imageButton2)
