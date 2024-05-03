@@ -66,9 +66,11 @@ class CardCollection : ComponentActivity() {
     }
 
     fun startCardDetailActivity(card: Card) {
+        println("CARTE  dans func = "+card)
         val intent = Intent(this, CardDetailActivity::class.java)
         intent.putExtra("CARD_ID", card.uid) // Passer l'identifiant de la carte ou toute autre donnée nécessaire
         startActivity(intent)
+        finish()
     }
 
 

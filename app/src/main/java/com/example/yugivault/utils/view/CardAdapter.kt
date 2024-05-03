@@ -31,11 +31,13 @@ class CardAdapter(private val cards: List<Card>,type:Int): RecyclerView.Adapter<
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val card = cards[position]
+
         when (holder.itemViewType) {
             TYPE_NORMAL->{
                 val cardViewHolder = holder as CardViewHolder
                 cardViewHolder.bind(card)
                 cardViewHolder.itemView.setOnClickListener {
+                    println("CARTE = "+card)
                     (holder.itemView.context as CardCollection).startCardDetailActivity(card)
                 }
             }

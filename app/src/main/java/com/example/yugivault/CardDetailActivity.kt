@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.example.yugivault.utils.db.AppDatabase
@@ -19,6 +20,9 @@ class CardDetailActivity : ComponentActivity(){
         setContentView(R.layout.activity_detail_card)
         Toast.makeText(this, "CardDetailActivity", Toast.LENGTH_SHORT).show()
 
+        recyclerView = findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
         val db = Room.databaseBuilder(
             applicationContext,
             AppDatabase::class.java, "dbVault"
@@ -26,17 +30,20 @@ class CardDetailActivity : ComponentActivity(){
 
         val cardDAO = db.cardDAO()
 
-        val intent = intent
-
-        val cardId = intent.getIntExtra("cardId", -1)
+        val cardId = intent.getIntExtra("CARD_ID", -1)
+        println("ICII "+cardId)
 
         if(cardId !=-1){
+            println("on est dedasn ")
             val card = cardDAO.getCardById(cardId)
+            println("CARTE = "+card.value?.uid)
 
-            card.value?.let {
-                adapter = CardAdapter(listOf(it),2)
-                recyclerView.adapter = adapter
-            }
+            card.observe(this, { card ->
+                card?.let {
+                    adapter = CardAdapter(listOf(card),2)
+                    recyclerView.adapter = adapter
+                }
+            })
         }
     }
 
