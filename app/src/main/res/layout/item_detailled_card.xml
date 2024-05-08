@@ -9,15 +9,15 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/frameLayout"
-        android:layout_width="234dp"
-        android:layout_height="286dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="95dp"
         android:background="#43485e"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.259"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.092">
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintVertical_bias="0.0">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/interiorCard"
@@ -30,66 +30,47 @@
             android:background="#bf9144"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0">
+            app:layout_constraintVertical_bias="0.0">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/NameAttributeZone"
-                android:layout_width="178dp"
-                android:layout_height="37dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
                 android:background="#d2b17e"
                 app:layout_constraintBottom_toTopOf="@+id/ArtWork"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
                     android:id="@+id/Name"
                     android:layout_width="202dp"
                     android:layout_height="18dp"
-                    android:layout_marginStart="4dp"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="12dp"
                     android:layout_marginBottom="13dp"
                     android:text="TextView"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-<<<<<<< HEAD
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="1.0" />
-=======
                     app:layout_constraintTop_toTopOf="parent" />
->>>>>>> e8ed1d44b31bd0e78433c49b0965dbc2b515c455
 
                 <TextView
                     android:id="@+id/Attribute"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-<<<<<<< HEAD
-                    android:layout_marginEnd="4dp"
-=======
                     android:layout_marginEnd="16dp"
->>>>>>> e8ed1d44b31bd0e78433c49b0965dbc2b515c455
                     android:layout_marginBottom="12dp"
                     android:text="Attri"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-<<<<<<< HEAD
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="1.0" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/DescStatTypeZone"
-                android:layout_width="194dp"
-                android:layout_height="63dp"
-=======
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -109,7 +90,6 @@
                 android:id="@+id/DescStatTypeZone"
                 android:layout_width="0dp"
                 android:layout_height="106dp"
->>>>>>> e8ed1d44b31bd0e78433c49b0965dbc2b515c455
                 android:layout_marginStart="13dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="13dp"
@@ -131,22 +111,6 @@
 
                 <TextView
                     android:id="@+id/Desc"
-<<<<<<< HEAD
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="96dp"
-                    android:layout_marginTop="20dp"
-                    android:text="Description"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/AtkDef"
-                    android:layout_width="144dp"
-                    android:layout_height="19dp"
-                    android:layout_marginEnd="4dp"
-                    android:layout_marginBottom="4dp"
-=======
                     android:layout_width="294dp"
                     android:layout_height="44dp"
                     android:layout_marginStart="1dp"
@@ -165,25 +129,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="2dp"
                     android:layout_marginBottom="5dp"
->>>>>>> e8ed1d44b31bd0e78433c49b0965dbc2b515c455
                     android:text="ATK : 000 / DEF 000"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-<<<<<<< HEAD
-
-            <!--            <ImageView
-                            android:id="@+id/ArtWork"
-                            android:layout_width="107dp"
-                            android:layout_height="114dp"
-                            tools:layout_editor_absoluteX="42dp"
-                            tools:layout_editor_absoluteY="60dp"
-                            tools:src="@tools:sample/avatars" />-->
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-=======
-        </androidx.constraintlayout.widget.ConstraintLayout>
->>>>>>> e8ed1d44b31bd0e78433c49b0965dbc2b515c455
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
