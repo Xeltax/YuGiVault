@@ -72,6 +72,13 @@ class MainActivity : ComponentActivity() {
             finish()
         }
 
+        val ButDeck:Button= findViewById(R.id.deck)
+        ButDeck.setOnClickListener{
+            val intent = Intent(this, DeckCollection::class.java)
+            startActivity(intent)
+            finish()
+        }
+
 
 
 
