@@ -30,16 +30,16 @@ class CardDetailActivity : ComponentActivity(){
         val cardDAO = db.cardDAO()
 
         val cardId = intent.getIntExtra("CARD_ID", -1)
-        println("ICII "+cardId)
+        println("Valeurr de l'intent "+cardId)
 
         if(cardId !=-1){
-            println("on est dedasn ")
-            val card = cardDAO.getCardById(cardId)
-            println("CARTE = "+card.value?.uid)
+            println("on est dedans ")
+            val card = cardDAO.getCardById(46986421)
 
             card.observe(this, { card ->
+                println("Obs : $card")
                 card?.let {
-                    adapter = CardAdapter(listOf(card),2,this)
+                    adapter = CardAdapter(listOf(card), 2, this)
                     recyclerView.adapter = adapter
                 }
             })

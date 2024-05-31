@@ -32,13 +32,13 @@ class MainActivity : ComponentActivity() {
         val DM = Card(1, "Dark Magician", "Monster", "The ultimate wizard in terms of attack and defense.", 2500, 2100, 7, "Spellcaster", "Dark", "Dark Magician", "SDY-006", "https://storage.googleapis.com/ygoprodeck.com/pics/46986414.jpg", "https://storage.googleapis.com/ygoprodeck.com/pics/46986414.jpg")
 
 // Observer les changements de données avec LiveData
-        cardDAO.getCardById(1).observe(this, Observer { card ->
+/*        cardDAO.getCardById(1).observe(this, Observer { card ->
             card?.let {
                 println("Card: ${it.name}, Type: ${it.type}")
             } ?: run {
                 println("Card not found for id")
             }
-        })
+        })*/
 
         // Insérer la carte dans la base de données
         GlobalScope.launch {
@@ -89,7 +89,7 @@ class MainActivity : ComponentActivity() {
         val apiHandler = ApiHandler(this)
 
 
-        apiHandler.getByName("Dark Magician",
+/*        apiHandler.getByName("Dark Magician",
             { response ->
                 // La requête a réussi, traiter la réponse ici
                 println("Réponse de la requête: $response")
@@ -99,7 +99,7 @@ class MainActivity : ComponentActivity() {
         ) { error ->
             // Une erreur s'est produite lors de la requête
             Toast.makeText(this, error, Toast.LENGTH_LONG).show()
-        }
+        }*/
 
 
         /*        setContent {

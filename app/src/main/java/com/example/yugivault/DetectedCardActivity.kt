@@ -116,23 +116,22 @@ class DetectedCardActivity : ComponentActivity() {
                 race = jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("race")!!
             )
             cardDAO.getCardById(cardInfo.id).observe(this, { card ->
-                if (card == null) {
-                    val newCard = Card(cardInfo.id, cardInfo.name, cardInfo.type, cardInfo.desc, cardInfo.atk, cardInfo.def, cardInfo.level, cardInfo.race, cardInfo.attribute)
-                    GlobalScope.launch {
-                        cardDAO.insert(newCard)
-                    }
-                    Toast.makeText(this, "Card added to collection", Toast.LENGTH_LONG).show()
+                if (card != null) {
+                    Toast.makeText(this@DetectedCardActivity, "Card already in collection", Toast.LENGTH_LONG).show()
                 } else {
-                    Toast.makeText(this, "Card already in collection", Toast.LENGTH_LONG).show()
+                    val newCard = Card(cardInfo.id, cardInfo.name, cardInfo.type, cardInfo.desc, cardInfo.atk, cardInfo.def, cardInfo.level, cardInfo.race, cardInfo.attribute)
+                    GlobalScope.launch {  cardDAO.insert(newCard) }
+                    Toast.makeText(this@DetectedCardActivity, "Card added to collection", Toast.LENGTH_LONG).show()
                 }
             })
+
             lifecycleScope.launch { val dlImage= downloadImage(apiHandler.getArtworkUrl(cardInfo.id),cardInfo.id)
             showDownloadPath(dlImage)}
 
 
-/*            val intent = Intent(this, CardCollection::class.java)
+            val intent = Intent(this, CardCollection::class.java)
             startActivity(intent)
-            finish()*/
+            finish()
         }//end btnYes
 
 
