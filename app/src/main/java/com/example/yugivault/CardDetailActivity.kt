@@ -39,7 +39,7 @@ class CardDetailActivity : ComponentActivity(){
 
             card.observe(this, { card ->
                 card?.let {
-                    adapter = CardAdapter(listOf(card),2)
+                    adapter = CardAdapter(listOf(card),2,this)
                     recyclerView.adapter = adapter
                 }
             })

@@ -22,6 +22,20 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.io.StringReader
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import  com.bumptech.glide.Glide
+import  kotlinx.coroutines.Dispatchers
+import  kotlinx.coroutines.launch
+import  kotlinx.coroutines.withContext
+import  okhttp3.OkHttpClient
+import  okhttp3.Request
+import  okhttp3.Response
+import  java.io.File
+import  java.io.FileOutputStream
+import  java.io.IOException
+import  java.io.InputStream
+import  androidx.lifecycle.lifecycleScope
 
 
 data class CardInfo (
@@ -38,13 +52,15 @@ data class CardInfo (
 )
 
 class DetectedCardActivity : ComponentActivity() {
+
+    private lateinit var Artwork: ImageView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detected_card)
 
         val Name = findViewById<TextView>(R.id.Name)
         val Attribute = findViewById<TextView>(R.id.Attribute)
-        val ArtWork = findViewById<ImageView>(R.id.ArtWork)
+        Artwork = findViewById<ImageView>(R.id.ArtWork)
         val TypeRace = findViewById<TextView>(R.id.TypeRace)
         val Desc = findViewById<TextView>(R.id.Desc)
         val AtkDef = findViewById<TextView>(R.id.AtkDef)
@@ -70,6 +86,7 @@ class DetectedCardActivity : ComponentActivity() {
                 TypeRace.text =  "["+jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("frameType")+"/" + jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("race")+"]"
                 AtkDef.text = "ATK/ "+jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("atk") + "  DEF /" + jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("def")
 
+                displayImageFromUrl(apiHandler.API_URL_ARTWORK+jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("id")+".jpg")
                 //Toast.makeText(this, response.toString(), Toast.LENGTH_LONG).show()
             }
         ) { error ->
@@ -77,6 +94,7 @@ class DetectedCardActivity : ComponentActivity() {
             Toast.makeText(this, error, Toast.LENGTH_LONG).show()
         }
 
+        //Bonne carte detecter
         btnYes.setOnClickListener{
             val db = Room.databaseBuilder(
                 applicationContext,
@@ -108,11 +126,17 @@ class DetectedCardActivity : ComponentActivity() {
                     Toast.makeText(this, "Card already in collection", Toast.LENGTH_LONG).show()
                 }
             })
-            val intent = Intent(this, CardCollection::class.java)
+            lifecycleScope.launch { val dlImage= downloadImage(apiHandler.getArtworkUrl(cardInfo.id),cardInfo.id)
+            showDownloadPath(dlImage)}
+
+
+/*            val intent = Intent(this, CardCollection::class.java)
             startActivity(intent)
-            finish()
+            finish()*/
         }//end btnYes
 
+
+        //Mauvaise carte detect
         btnNo.setOnClickListener{
             Toast.makeText(this, "Card not added to collection, rescan the card please", Toast.LENGTH_LONG).show()
             val intent = Intent(this, MLActivity::class.java)
@@ -125,4 +149,58 @@ class DetectedCardActivity : ComponentActivity() {
 
 
     }
+    private fun showDownloadPath(file: File) {
+        Toast.makeText(this, "Image téléchargée à : ${file.absolutePath}", Toast.LENGTH_LONG).show()
+        Log.d("MainActivity", "Image téléchargée à : ${file.absolutePath}")
+    }
+    private suspend fun fetchCardImageUrl(url: String): String? = withContext(Dispatchers.IO) {
+        val client = OkHttpClient()
+        val request = Request.Builder().url(url).build()
+        return@withContext try {
+            val response: Response = client.newCall(request).execute()
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+            val responseData = response.body?.string()
+            if (responseData != null) {
+                val json = JSONObject(responseData)
+                val cardImages = json.getJSONArray("data").getJSONObject(0).getJSONArray("card_images")
+                cardImages.getJSONObject(0).getString("image_url_cropped")
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            Log.e("MainActivity", "Failed to fetch image URL", e)
+            null
+        }
+    }
+
+    private suspend fun downloadImage(url: String,id: Int): File = withContext(Dispatchers.IO) {
+        val client = OkHttpClient()
+        val request = Request.Builder().url(url).build()
+        val response: Response = client.newCall(request).execute()
+        if (!response.isSuccessful) throw IOException("Failed to download image: $response")
+
+        val inputStream: InputStream = response.body!!.byteStream()
+        val file = File(getExternalFilesDir(null), "$id.jpg")
+
+        FileOutputStream(file).use { output ->
+            inputStream.copyTo(output)
+        }
+
+        file
+    }
+
+    private fun displayImageFromFile(file: File) {
+        Glide.with(this)
+            .load(file)
+            .into(Artwork)
+    }
+
+    private fun displayImageFromUrl(url: String) {
+        Glide.with(this)
+            .load(url)
+            .into(Artwork)
+    }
+
+
 }

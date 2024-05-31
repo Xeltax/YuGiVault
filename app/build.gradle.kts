@@ -58,6 +58,12 @@ android {
 
 
 dependencies {
+
+    implementation ("com.squareup.okhttp3:okhttp:4.9.1")
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
+
+
     //implementation("com.google.devtools.ksp:symbol-processing-api:1.9.21-1.0.15")
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.22"))
     val room_version = "2.6.1"
