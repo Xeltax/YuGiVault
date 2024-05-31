@@ -57,7 +57,7 @@ class CardCollection : ComponentActivity() {
         cards.observe(this,{cards ->
             cards?.let{
                 if (it.isNotEmpty()){
-                    adapter = CardAdapter(it,1)
+                    adapter = CardAdapter(it,1,this)
                     recyclerView.adapter = adapter
                 }
             }

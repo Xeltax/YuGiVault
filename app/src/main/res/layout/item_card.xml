@@ -110,13 +110,15 @@
                     app:layout_constraintEnd_toEndOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!--            <ImageView
+            <ImageView
                 android:id="@+id/ArtWork"
                 android:layout_width="107dp"
                 android:layout_height="114dp"
-                tools:layout_editor_absoluteX="42dp"
-                tools:layout_editor_absoluteY="60dp"
-                tools:src="@tools:sample/avatars" />-->
+                android:layout_marginStart="48dp"
+                android:layout_marginTop="56dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@tools:sample/avatars" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

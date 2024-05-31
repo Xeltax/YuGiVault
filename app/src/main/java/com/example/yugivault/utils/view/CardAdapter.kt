@@ -1,13 +1,16 @@
 package com.example.yugivault.utils.view
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.yugivault.CardCollection
 import com.example.yugivault.R
 import com.example.yugivault.utils.entity.Card
+import java.io.File
 
-class CardAdapter(private val cards: List<Card>,type:Int): RecyclerView.Adapter<RecyclerView.ViewHolder>()    {
+class CardAdapter(private val cards: List<Card>,type:Int,private val context :Context ): RecyclerView.Adapter<RecyclerView.ViewHolder>()    {
     private val type = type
 
     companion object {
@@ -36,6 +39,14 @@ class CardAdapter(private val cards: List<Card>,type:Int): RecyclerView.Adapter<
             TYPE_NORMAL->{
                 val cardViewHolder = holder as CardViewHolder
                 cardViewHolder.bind(card)
+                val imageFile = File(context.getExternalFilesDir(null),"${card.uid}.jpg")
+                if(imageFile.exists()){
+                    Glide.with(context)
+                        .load(imageFile)
+                        .into(holder.Artwork)
+                }else{
+
+                }
                 cardViewHolder.itemView.setOnClickListener {
                     println("CARTE = "+card)
                     (holder.itemView.context as CardCollection).startCardDetailActivity(card)
@@ -44,6 +55,14 @@ class CardAdapter(private val cards: List<Card>,type:Int): RecyclerView.Adapter<
             TYPE_DETAILLED-> {
                 val detailledCardViewHolder = holder as DetailledCardViewHolder
                 detailledCardViewHolder.bind(card)
+                val imageFile = File(context.getExternalFilesDir(null),"${card.uid}.jpg")
+                if(imageFile.exists()){
+                    Glide.with(context)
+                        .load(imageFile)
+                        .into(holder.Artwork)
+                }else{
+
+                }
                 detailledCardViewHolder.itemView.setOnClickListener {
 
                 }

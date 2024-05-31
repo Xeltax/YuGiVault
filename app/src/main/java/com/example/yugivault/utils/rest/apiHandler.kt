@@ -12,7 +12,7 @@ import java.io.StringReader
 class ApiHandler(private val context: Context) {
 
     private val API_URL = "https://db.ygoprodeck.com/api/v7/cardinfo.php"
-    private val API_URL_ARTWORK= "https://images.ygoprodeck.com/images/cards_cropped/"
+    val API_URL_ARTWORK= "https://images.ygoprodeck.com/images/cards_cropped/"
 
     // Fonction pour faire une requête GET à une API distante
     fun makeApiRequest(url: String, onSuccess: (JSONObject) -> Unit, onError: (String) -> Unit) {
@@ -58,7 +58,13 @@ class ApiHandler(private val context: Context) {
     fun getByArchetype(name: String, onSuccess: (JSONObject) -> Unit, onError: (String) -> Unit) {
         makeApiRequest(API_URL + "?archetype=${name}", onSuccess, onError)
     }
+    fun getByArtwork(id: Int,onSuccess: (JSONObject) -> Unit, onError: (String) -> Unit){
+        makeApiRequest(API_URL_ARTWORK+id+".jpg",onSuccess,onError)
+    }
 
+    fun getArtworkUrl(id: Int): String {
+        return API_URL_ARTWORK+"$id.jpg"
+    }
 
 
 

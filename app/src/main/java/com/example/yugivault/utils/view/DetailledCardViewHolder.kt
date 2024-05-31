@@ -1,6 +1,7 @@
 package com.example.yugivault.utils.view
 
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.yugivault.R
@@ -12,11 +13,13 @@ class DetailledCardViewHolder (itemView: View) : RecyclerView.ViewHolder(itemVie
     val cardAtkDef: TextView = itemView.findViewById(R.id.AtkDef)
     val cardAttribute: TextView = itemView.findViewById(R.id.Attribute)
     val cardDesc: TextView = itemView.findViewById(R.id.Desc)
+    val Artwork : ImageView = itemView.findViewById(R.id.ArtWork)
 
     fun bind(card: Card) {
         cardName.text = card.name
         cardTypeRace.text = "${card.type}/${card.race}"
         cardAtkDef.text = "ATK: ${card.atk} / DEF: ${card.def}"
         cardDesc.text = card.desc
+        cardAttribute.text = card.attribute
     }
 }
