@@ -41,7 +41,6 @@ class CardCollection : ComponentActivity() {
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-
         val db = Room.databaseBuilder(
             applicationContext,
             AppDatabase::class.java, "dbVault"
@@ -49,20 +48,10 @@ class CardCollection : ComponentActivity() {
 
         val cardDAO = db.cardDAO()
 
-        //populateDatabase(db)
+        adapter = CardAdapter(listOf(), 1, this)
+        recyclerView.adapter = adapter
 
-
-        val cards = cardDAO.getCards()
-        println(cards.value.toString())
-        cards.observe(this,{cards ->
-            cards?.let{
-                if (it.isNotEmpty()){
-                    adapter = CardAdapter(it,1,this)
-                    recyclerView.adapter = adapter
-                }
-            }
-        })
-
+        loadCards()
     }
 
     fun startCardDetailActivity(card: Card) {
@@ -72,6 +61,24 @@ class CardCollection : ComponentActivity() {
         startActivity(intent)
         finish()
     }
+
+    fun loadCards() {
+        val db = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java, "dbVault"
+        ).build()
+        val cardDAO = db.cardDAO()
+        val cards = cardDAO.getCards()
+        cards.observe(this, { cards ->
+            cards?.let {
+                if (it.isNotEmpty()) {
+                    adapter = CardAdapter(it, 1, this)
+                    recyclerView.adapter = adapter
+                }
+            }
+        })
+    }
+
 
 
 }
