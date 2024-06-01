@@ -20,6 +20,13 @@
             android:textStyle="bold"
             android:layout_marginBottom="16dp"/>
 
+        <Button
+            android:id="@+id/btnCreateDeck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Crée un deck"
+            android:layout_marginBottom="16dp"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewDecks"
             android:layout_width="match_parent"

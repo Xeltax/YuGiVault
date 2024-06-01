@@ -16,6 +16,11 @@ class DeckAdapter : RecyclerView.Adapter<DeckAdapter.DeckViewHolder>() {
         decks = newDecks
         notifyDataSetChanged()
     }
+ 
+    fun getDecks(): List<DeckWithCard> {
+        return decks
+    }
+
 
     // Crée un ViewHolder pour chaque élément de la liste
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeckViewHolder {

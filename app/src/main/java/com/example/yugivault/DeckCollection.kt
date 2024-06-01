@@ -1,6 +1,7 @@
 package com.example.yugivault
 
 import android.os.Bundle
+import android.widget.Button
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,6 +12,15 @@ import com.example.yugivault.utils.entity.Card
 import com.example.yugivault.utils.entity.Deck
 import com.example.yugivault.utils.entity.DeckWithCard
 import com.example.yugivault.utils.view.DeckAdapter
+import android.app.AlertDialog
+import android.content.DialogInterface
+import android.text.InputType
+import android.widget.EditText
+import com.example.yugivault.utils.dao.DeckDAO
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 fun mockDecksWithCards(): List<DeckWithCard> {
     val mockDecksWithCards = mutableListOf<DeckWithCard>()
@@ -47,11 +57,12 @@ class DeckCollection : ComponentActivity(){
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var deckAdapter: DeckAdapter
+    private lateinit var buttonCreateDeck: Button
+    private lateinit var deckDao: DeckDAO
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_deck_collection)
-        Toast.makeText(this, "CardDetailActivity", Toast.LENGTH_SHORT).show()
 
         recyclerView = findViewById(R.id.recyclerViewDecks)
         deckAdapter = DeckAdapter()
@@ -59,16 +70,78 @@ class DeckCollection : ComponentActivity(){
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = deckAdapter
 
-
-        val mockDecksWithCards = mockDecksWithCards()
-
-        deckAdapter.submitList(mockDecksWithCards)
-
         val db = Room.databaseBuilder(
             applicationContext,
             AppDatabase::class.java, "dbVault"
         ).build()
 
+        deckDao=db.deckDAO()
+
+
+        buttonCreateDeck = findViewById(R.id.btnCreateDeck)
+        buttonCreateDeck.setOnClickListener {
+            showCreateDeckDialog()
+        }
+
+
+
+
+
+        loadDecks()
+
 
     }
+
+
+    private fun showCreateDeckDialog() {
+        // Crée une AlertDialog pour demander le nom du nouveau deck
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Créer un nouveau Deck")
+
+        // Crée un champ de texte pour entrer le nom du deck
+        val input = EditText(this)
+        input.inputType = InputType.TYPE_CLASS_TEXT
+        builder.setView(input)
+
+        // Configure les boutons de la boîte de dialogue
+        builder.setPositiveButton("Créer") { dialog, _ ->
+            val deckName = input.text.toString()
+            if (deckName.isNotEmpty()) {
+                createNewDeck(deckName)
+            }
+            dialog.dismiss()
+        }
+        builder.setNegativeButton("Annuler") { dialog, _ ->
+            dialog.cancel()
+        }
+
+        builder.show()
+    }
+
+    private fun loadDecks() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val decks = deckDao.getDecksWIthCards()
+            withContext(Dispatchers.Main) {
+                deckAdapter.submitList(decks)
+            }
+        }
+    }
+
+    private fun createNewDeck(name: String) {
+        val newDeck = Deck(deckId = generateNewDeckId(), name = name)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            deckDao.insert(newDeck)
+            val updatedDecks = deckDao.getDecksWIthCards()
+            withContext(Dispatchers.Main) {
+                deckAdapter.submitList(updatedDecks)
+            }
+        }
+    }
+
+    private fun generateNewDeckId(): Int {
+        // Génère un nouvel identifiant pour le deck (logique simplifiée)
+        return (deckAdapter.getDecks().maxOfOrNull { it.deck.deckId } ?: 0) + 1
+    }
+
 }
