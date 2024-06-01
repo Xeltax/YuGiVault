@@ -14,6 +14,7 @@ import com.example.yugivault.utils.entity.DeckWithCard
 import com.example.yugivault.utils.view.DeckAdapter
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.text.InputType
 import android.widget.EditText
 import com.example.yugivault.utils.dao.DeckDAO
@@ -65,7 +66,12 @@ class DeckCollection : ComponentActivity(){
         setContentView(R.layout.activity_deck_collection)
 
         recyclerView = findViewById(R.id.recyclerViewDecks)
-        deckAdapter = DeckAdapter()
+        deckAdapter = DeckAdapter({ deckWithCard ->
+            val intent = Intent(this, DeckDetailActivity::class.java).apply {
+                putExtra("deckId", deckWithCard.deck.deckId)
+                putExtra("deckName", deckWithCard.deck.name)
+            }
+            startActivity(intent)})
 
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = deckAdapter
@@ -120,7 +126,7 @@ class DeckCollection : ComponentActivity(){
 
     private fun loadDecks() {
         CoroutineScope(Dispatchers.IO).launch {
-            val decks = deckDao.getDecksWIthCards()
+            val decks = deckDao.getALLDecksWithCards()
             withContext(Dispatchers.Main) {
                 deckAdapter.submitList(decks)
             }
@@ -132,7 +138,7 @@ class DeckCollection : ComponentActivity(){
 
         CoroutineScope(Dispatchers.IO).launch {
             deckDao.insert(newDeck)
-            val updatedDecks = deckDao.getDecksWIthCards()
+            val updatedDecks = deckDao.getALLDecksWithCards()
             withContext(Dispatchers.Main) {
                 deckAdapter.submitList(updatedDecks)
             }
@@ -141,7 +147,7 @@ class DeckCollection : ComponentActivity(){
 
     private fun generateNewDeckId(): Int {
         // Génère un nouvel identifiant pour le deck (logique simplifiée)
-        return (deckAdapter.getDecks().maxOfOrNull { it.deck.deckId } ?: 0) + 1
+        return (deckAdapter.currentList.maxOfOrNull { it.deck.deckId } ?: 0) + 1
     }
 
 }
