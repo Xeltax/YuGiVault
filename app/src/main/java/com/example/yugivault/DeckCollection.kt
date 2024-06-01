@@ -94,8 +94,6 @@ class DeckCollection : ComponentActivity(){
 
 
         loadDecks()
-
-
     }
 
 
@@ -138,12 +136,16 @@ class DeckCollection : ComponentActivity(){
 
         CoroutineScope(Dispatchers.IO).launch {
             deckDao.insert(newDeck)
-            val updatedDecks = deckDao.getALLDecksWithCards()
             withContext(Dispatchers.Main) {
-                deckAdapter.submitList(updatedDecks)
+                // Ajouter le nouveau deck à la liste actuelle sans recharger la liste complète
+                val updatedList = mutableListOf<DeckWithCard>()
+                updatedList.addAll(deckAdapter.currentList)
+                updatedList.add(DeckWithCard(newDeck, emptyList()))
+                deckAdapter.submitList(updatedList)
             }
         }
     }
+
 
     private fun generateNewDeckId(): Int {
         // Génère un nouvel identifiant pour le deck (logique simplifiée)
