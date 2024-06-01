@@ -32,6 +32,12 @@ interface DeckDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDeckCardCrossRef(crossRef: DeckCardCrossRef)
 
+    @Query("DELETE FROM DeckCardCrossRef WHERE deckId IN (:deckIds)")
+    suspend fun deleteDeckWithCArd(deckIds: List<Int>)
+
+    @Query("DELETE FROM deck WHERE deckId IN (:deckIds)")
+    suspend fun deleteDeck(deckIds: List<Int>)
+
 
 
 }

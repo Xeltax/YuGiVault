@@ -23,37 +23,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-fun mockDecksWithCards(): List<DeckWithCard> {
-    val mockDecksWithCards = mutableListOf<DeckWithCard>()
-
-    // Création de quelques cartes fictives
-    val cards = listOf(
-        Card(1, "Dark Magician", "Spellcaster", "The ultimate wizard.", 2500, 2100, 7, "Dark", "Spellcaster"),
-        Card(2, "Blue-Eyes White Dragon", "Dragon", "This legendary dragon is a powerful engine of destruction.", 3000, 2500, 8, "Light", "Dragon"),
-        Card(3, "Red-Eyes Black Dragon", "Dragon", "A ferocious dragon with a deadly attack.", 2400, 2000, 7, "Dark", "Dragon")
-        // Ajoutez autant de cartes que nécessaire
-    )
-
-    // Création de quelques decks fictifs avec des cartes associées
-    val decks = listOf(
-        Deck(1, "Deck 1"),
-        Deck(2, "Deck 2")
-        // Ajoutez autant de decks que nécessaire
-    )
-
-    // Attribution de certaines cartes à chaque deck
-    decks.forEach { deck ->
-        val deckCards = mutableListOf<Card>()
-        // Ajoutez quelques cartes au hasard à chaque deck
-        repeat((1..3).random()) {
-            deckCards.add(cards.random())
-        }
-        mockDecksWithCards.add(DeckWithCard(deck, deckCards))
-    }
-
-    return mockDecksWithCards
-}
-
 class DeckCollection : ComponentActivity(){
 
     private lateinit var recyclerView: RecyclerView
@@ -89,13 +58,46 @@ class DeckCollection : ComponentActivity(){
             showCreateDeckDialog()
         }
 
-
+        val buttonDeleteDeck = findViewById<Button>(R.id.btnDeleteDeck)
+        buttonDeleteDeck.setOnClickListener {
+            val selectedDecks = deckAdapter.getSelectedDecks()
+            if (selectedDecks.isNotEmpty()) {
+                showDeleteConfirmationDialog(selectedDecks)
+            } else {
+                Toast.makeText(this, "Aucun deck sélectionné", Toast.LENGTH_SHORT).show()
+            }
+        }
 
 
 
         loadDecks()
     }
 
+    private fun showDeleteConfirmationDialog(decks: Set<DeckWithCard>) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Supprimer les decks")
+            .setMessage("Êtes-vous sûr de vouloir supprimer ces decks?")
+            .setPositiveButton("Oui") { _, _ ->
+                deleteDecks(decks)
+            }
+            .setNegativeButton("Non") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    private fun deleteDecks(decks: Set<DeckWithCard>) {
+        // Supprimer les associations Deck-Card de la table DeckCardCrossRef
+        val deckIdsToDelete = decks.map { it.deck.deckId }
+        CoroutineScope(Dispatchers.IO).launch {
+            deckDao.deleteDeckWithCArd(deckIdsToDelete)
+            deckDao.deleteDeck(deckIdsToDelete)
+            withContext(Dispatchers.Main) {
+                // Recharger la liste des decks après la suppression
+                loadDecks()
+            }
+        }
+    }
 
     private fun showCreateDeckDialog() {
         // Crée une AlertDialog pour demander le nom du nouveau deck

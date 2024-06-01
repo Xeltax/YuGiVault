@@ -18,14 +18,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <Button
         android:id="@+id/btnCreateDeck"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="120dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="40dp"
         android:text="Crée un deck"
+
         app:layout_constraintStart_toEndOf="@+id/textViewTitle"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnDeleteDeck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="40dp"
+        android:text="Delete"
+        app:layout_constraintStart_toEndOf="@+id/btnCreateDeck"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
