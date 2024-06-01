@@ -38,6 +38,7 @@
         <activity android:name=".CardCollection" />
         <activity android:name=".CardDetailActivity" />
         <activity android:name=".DeckCollection"/>
+        <activity android:name=".DeckDetailActivity"/>
     </application>
 
 </manifest>

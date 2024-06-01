@@ -3,46 +3,70 @@ package com.example.yugivault.utils.view
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.yugivault.utils.entity.DeckWithCard
 import com.example.yugivault.R
+import com.example.yugivault.utils.entity.Deck
 
-class DeckAdapter : RecyclerView.Adapter<DeckAdapter.DeckViewHolder>() {
-    private var decks: List<DeckWithCard> = listOf()
+class DeckAdapter(private val onDeckClick: (DeckWithCard) -> Unit) : ListAdapter<DeckWithCard, DeckAdapter.DeckViewHolder>(DeckDiffCallback()) {
+    private var selectedDecks= mutableSetOf<DeckWithCard>()
 
-    // Méthode pour soumettre une nouvelle liste de decks
-    fun submitList(newDecks: List<DeckWithCard>) {
-        decks = newDecks
-        notifyDataSetChanged()
+    fun getSelectedDecks(): Set<DeckWithCard> {
+        return selectedDecks
     }
-
-    // Crée un ViewHolder pour chaque élément de la liste
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeckViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_deck, parent, false)
-        return DeckViewHolder(itemView)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_deck, parent, false)
+        return DeckViewHolder(view, onDeckClick)
     }
 
-    // Associe les données aux éléments de la liste
     override fun onBindViewHolder(holder: DeckViewHolder, position: Int) {
-        val currentDeck = decks[position]
-        holder.bind(currentDeck)
+        val deckWithCard = getItem(position)
+        holder.bind(deckWithCard, selectedDecks.contains(deckWithCard))
     }
 
-    // Retourne le nombre total d'éléments dans la liste
-    override fun getItemCount(): Int {
-        return decks.size
+    inner class DeckViewHolder(itemView: View, private val onDeckClick: (DeckWithCard) -> Unit) : RecyclerView.ViewHolder(itemView) {
+        private val deckName: TextView = itemView.findViewById(R.id.textViewDeckName)
+        private val checkBox: CheckBox = itemView.findViewById(R.id.checkBoxDeck)
+
+/*        fun bind(deckWithCard: DeckWithCard) {
+            deckName.text = deckWithCard.deck.name
+            itemView.setOnClickListener {
+                onDeckClick(deckWithCard)
+            }
+        }*/
+        fun bind(deckWithCard: DeckWithCard, isSelected: Boolean) {
+            deckName.text = deckWithCard.deck.name
+
+            // Mettre à jour l'état de la case à cocher
+            checkBox.isChecked = isSelected
+
+            // Gérer les changements d'état de la case à cocher
+            checkBox.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    selectedDecks.add(deckWithCard)
+                } else {
+                    selectedDecks.remove(deckWithCard)
+                }
+            }
+
+            itemView.setOnClickListener {
+                onDeckClick(deckWithCard)
+            }
+        }
     }
 
-    // ViewHolder pour un élément de la liste
-    class DeckViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val deckNameTextView: TextView = itemView.findViewById(R.id.textViewDeckName)
-        private val cardCountTextView: TextView = itemView.findViewById(R.id.textViewCardCount)
+    class DeckDiffCallback : DiffUtil.ItemCallback<DeckWithCard>() {
+        override fun areItemsTheSame(oldItem: DeckWithCard, newItem: DeckWithCard): Boolean {
+            return oldItem.deck.deckId == newItem.deck.deckId
+        }
 
-        // Associe les données au ViewHolder
-        fun bind(deckWithCards: DeckWithCard) {
-            deckNameTextView.text = deckWithCards.deck.name
-            cardCountTextView.text = "Nombre de cartes : ${deckWithCards.cards.size}"
+        override fun areContentsTheSame(oldItem: DeckWithCard, newItem: DeckWithCard): Boolean {
+            return oldItem == newItem
         }
     }
 }

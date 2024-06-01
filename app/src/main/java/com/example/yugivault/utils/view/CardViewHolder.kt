@@ -17,7 +17,7 @@ class CardViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
     fun bind(card : Card) {
         cardName.text = card.name
         cardTypeRace.text = card.type +"/"+card.race
-        cardAtkDef.text = card.atk.toString()+" / "+card.def.toString()
+        cardAtkDef.text = "ATK: "+card.atk.toString()+" / DEF: "+card.def.toString()
         cardAttribute.text = card.attribute
     }
 }

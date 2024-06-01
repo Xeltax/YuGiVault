@@ -34,7 +34,7 @@ class CardDetailActivity : ComponentActivity(){
 
         if(cardId !=-1){
             println("on est dedans ")
-            val card = cardDAO.getCardById(46986421)
+            val card = cardDAO.getCardById(cardId)
 
             card.observe(this, { card ->
                 println("Obs : $card")

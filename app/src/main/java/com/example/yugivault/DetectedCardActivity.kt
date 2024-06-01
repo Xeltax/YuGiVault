@@ -68,13 +68,13 @@ class DetectedCardActivity : ComponentActivity() {
         val btnNo = findViewById<TextView>(R.id.btnNo)
 
         //val detectedText = intent.getStringExtra("detectedText")
-        val detectedText = "Dark Magician"
+        val detectedText = "Anchamoufrite"
         println(detectedText)
 
 
         val apiHandler = ApiHandler(this)
         var jsonResponse: JSONObject? = null
-        apiHandler.getByName("Dark Magician",
+        apiHandler.getByName(detectedText,
             { response ->
                 // La requête a réussi, traiter la réponse ici
                 println("Réponse de la requête: $response")
@@ -125,8 +125,7 @@ class DetectedCardActivity : ComponentActivity() {
                 }
             })
 
-            lifecycleScope.launch { val dlImage= downloadImage(apiHandler.getArtworkUrl(cardInfo.id),cardInfo.id)
-            showDownloadPath(dlImage)}
+            lifecycleScope.launch { val dlImage= downloadImage(apiHandler.getArtworkUrl(cardInfo.id),cardInfo.id) }
 
 
             val intent = Intent(this, CardCollection::class.java)
@@ -148,10 +147,7 @@ class DetectedCardActivity : ComponentActivity() {
 
 
     }
-    private fun showDownloadPath(file: File) {
-        Toast.makeText(this, "Image téléchargée à : ${file.absolutePath}", Toast.LENGTH_LONG).show()
-        Log.d("MainActivity", "Image téléchargée à : ${file.absolutePath}")
-    }
+
     private suspend fun fetchCardImageUrl(url: String): String? = withContext(Dispatchers.IO) {
         val client = OkHttpClient()
         val request = Request.Builder().url(url).build()
