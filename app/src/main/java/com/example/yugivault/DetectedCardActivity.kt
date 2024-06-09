@@ -67,8 +67,9 @@ class DetectedCardActivity : ComponentActivity() {
         val btnYes = findViewById<TextView>(R.id.btnYes)
         val btnNo = findViewById<TextView>(R.id.btnNo)
 
-        val detectedText = intent.getStringExtra("detectedText")
+        val receveText = intent.getStringExtra("detectedText")
          //val detectedText = "magicien sombre"
+        val detectedText=  receveText?.replace(" ","%20")
         println(detectedText)
 
 

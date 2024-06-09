@@ -277,6 +277,10 @@ class MLActivity :  ComponentActivity(),ImageAnalysis.Analyzer {
         dialog.show()
     }
 
+    private fun lowerCase(): Any {
+        TODO()
+    }
+
     private fun showCustomTextDialog() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Mettre le nom de la carte ")
