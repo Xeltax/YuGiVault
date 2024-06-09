@@ -67,31 +67,34 @@ class DetectedCardActivity : ComponentActivity() {
         val btnYes = findViewById<TextView>(R.id.btnYes)
         val btnNo = findViewById<TextView>(R.id.btnNo)
 
-        //val detectedText = intent.getStringExtra("detectedText")
-        val detectedText = "Anchamoufrite"
+        val receveText = intent.getStringExtra("detectedText")
+         //val detectedText = "magicien sombre"
+        val detectedText=  receveText?.replace(" ","%20")
         println(detectedText)
 
 
         val apiHandler = ApiHandler(this)
         var jsonResponse: JSONObject? = null
-        apiHandler.getByName(detectedText,
-            { response ->
-                // La requête a réussi, traiter la réponse ici
-                println("Réponse de la requête: $response")
+        if (detectedText != null) {
+            apiHandler.getByName(detectedText,
+                { response ->
+                    // La requête a réussi, traiter la réponse ici
+                    println("Réponse de la requête: $response")
 
-                jsonResponse= JSONObject(response.toString())
-                Name.text = jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("name")
-                Attribute.text = jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("attribute")
-                Desc.text = jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("desc")
-                TypeRace.text =  "["+jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("frameType")+"/" + jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("race")+"]"
-                AtkDef.text = "ATK/ "+jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("atk") + "  DEF /" + jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("def")
+                    jsonResponse= JSONObject(response.toString())
+                    Name.text = jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("name")
+                    Attribute.text = jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("attribute")
+                    Desc.text = jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("desc")
+                    TypeRace.text =  "["+jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("frameType")+"/" + jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("race")+"]"
+                    AtkDef.text = "ATK/ "+jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("atk") + "  DEF /" + jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("def")
 
-                displayImageFromUrl(apiHandler.API_URL_ARTWORK+jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("id")+".jpg")
-                //Toast.makeText(this, response.toString(), Toast.LENGTH_LONG).show()
+                    displayImageFromUrl(apiHandler.API_URL_ARTWORK+jsonResponse?.getJSONArray("data")?.getJSONObject(0)?.getString("id")+".jpg")
+                    //Toast.makeText(this, response.toString(), Toast.LENGTH_LONG).show()
+                }
+            ) { error ->
+                // Une erreur s'est produite lors de la requête
+                Toast.makeText(this, error, Toast.LENGTH_LONG).show()
             }
-        ) { error ->
-            // Une erreur s'est produite lors de la requête
-            Toast.makeText(this, error, Toast.LENGTH_LONG).show()
         }
 
         //Bonne carte detecter

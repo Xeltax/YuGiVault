@@ -13,6 +13,7 @@ class ApiHandler(private val context: Context) {
 
     private val API_URL = "https://db.ygoprodeck.com/api/v7/cardinfo.php"
     val API_URL_ARTWORK= "https://images.ygoprodeck.com/images/cards_cropped/"
+    private val FR = "&language=fr"
 
     // Fonction pour faire une requête GET à une API distante
     fun makeApiRequest(url: String, onSuccess: (JSONObject) -> Unit, onError: (String) -> Unit) {
@@ -52,7 +53,7 @@ class ApiHandler(private val context: Context) {
     }
 
     fun getByName(name: String, onSuccess: (JSONObject) -> Unit, onError: (String) -> Unit) {
-        makeApiRequest(API_URL + "?name=${name}", onSuccess, onError)
+        makeApiRequest(API_URL + "?name=${name}"+FR, onSuccess, onError)
     }
 
     fun getByArchetype(name: String, onSuccess: (JSONObject) -> Unit, onError: (String) -> Unit) {
