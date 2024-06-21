@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="72dp"
         android:layout_marginTop="124dp"
-        android:text="Chnage d'acitivite"
+        android:text="Scan de carte"
         app:layout_constraintStart_toEndOf="@+id/Card"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,6 +22,7 @@
         android:layout_marginStart="48dp"
         android:layout_marginTop="124dp"
         android:text="Card"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,9 +30,9 @@
         android:id="@+id/Collection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="112dp"
-        android:text="Ma collection"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="124dp"
+        android:text="Mes cartes"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Card" />
 
@@ -39,8 +40,9 @@
         android:id="@+id/deck"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:text="Deck"
-        app:layout_constraintTop_toBottomOf="@+id/button"
-        tools:layout_editor_absoluteX="263dp" />
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="124dp"
+        android:text="Mes deck"
+        app:layout_constraintStart_toEndOf="@+id/Collection"
+        app:layout_constraintTop_toBottomOf="@+id/button" />
 </androidx.constraintlayout.widget.ConstraintLayout>
